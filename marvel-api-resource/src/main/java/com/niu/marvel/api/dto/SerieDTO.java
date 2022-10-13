@@ -12,5 +12,6 @@ public class SerieDTO {
 	private String resourceURI;
 	private int startYear;
 	private int endYear;
+	private String type;
 	private ThumbnailModel thumbnail;
 }

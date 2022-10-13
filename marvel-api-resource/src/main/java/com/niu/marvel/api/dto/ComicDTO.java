@@ -9,6 +9,7 @@ public class ComicDTO {
 	private int issueNumber;
 	private String description;
 	private String upc;
+	private int pageCount;
 	private String resourceURI;
 	
 }

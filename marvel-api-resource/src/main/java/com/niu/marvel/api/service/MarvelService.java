@@ -18,6 +18,12 @@ public class MarvelService {
 	private final Params params;
 	private final Environment env;
 	
+	
+	/**
+	 * MarvelService constructor with required parameters
+	 * @param client FeignClient Service
+	 * @param env Environment variable for accessing application properties values
+	 */
 	public MarvelService(FeignServiceClient client, Environment env) {
 		this.client = client;
 		this.env = env;
@@ -26,18 +32,38 @@ public class MarvelService {
 				env.getProperty("external.api.hash"));
 	}
 
+	/**
+	 * Method getCharacters()
+	 * @return returns a list of characters using given parameters of the 
+	 * server-side application of Marvel Api Authentication
+	 */
 	public ResponseModel<CharacterDTO> getCharacters(){
 		return client.getCharacters(params);
 	};
 	
+	/**
+	 * Method getComics()
+	 * @return returns a list of comics using given parameters of the 
+	 * server-side application of Marvel Api Authentication
+	 */
 	public ResponseModel<ComicDTO> getComics(){
 		return client.getComics(params);
 	}
 
+	/**
+	 * Method getSeries()
+	 * @return returns a list of series using given parameters of the  
+	 * server-side application of Marvel Api Authentication
+	 */
 	public ResponseModel<SerieDTO> getSeries(){
 		return client.getSeries(params);
 	}
 	
+	/**
+	 * Method getCreators()
+	 * @return returns a list of creators using given parameters of the  
+	 * server-side application of Marvel Api Authentication
+	 */
 	public ResponseModel<CreatorDTO> getCreators(){
 		return client.getCreators(params);
 	}
