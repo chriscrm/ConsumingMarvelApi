@@ -18,7 +18,6 @@ public class MarvelService {
 	private final Params params;
 	private final Environment env;
 	
-	
 	/**
 	 * MarvelService constructor with required parameters
 	 * @param client FeignClient Service
