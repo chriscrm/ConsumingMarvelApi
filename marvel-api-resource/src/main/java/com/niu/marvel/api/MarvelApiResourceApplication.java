@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 
 @SpringBootApplication
 @EnableFeignClients
-@OpenAPIDefinition(info = @Info(title = "Marvel Resource API", version = "1.0", description = "Fetching data from Marvel"))
+@OpenAPIDefinition(info = @Info(title = "Marvel Resource API", version = "1.0", description = "Fetching Data from Marvel"))
 public class MarvelApiResourceApplication {
 
 	public static void main(String[] args) {
