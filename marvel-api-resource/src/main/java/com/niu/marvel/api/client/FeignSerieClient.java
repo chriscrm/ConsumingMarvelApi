@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.niu.marvel.api.client.configuration.FeignClientConfig;
 import com.niu.marvel.api.client.model.ResponseModel;
-import com.niu.marvel.api.configuration.FeignClientConfig;
 import com.niu.marvel.api.dto.SerieDTO;
 
 @FeignClient(name = "feignSerieClient", url = "${external.api.base-url}", configuration = FeignClientConfig.class)

@@ -5,8 +5,8 @@ import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.niu.marvel.api.client.configuration.FeignClientConfig;
 import com.niu.marvel.api.client.model.ResponseModel;
-import com.niu.marvel.api.configuration.FeignClientConfig;
 import com.niu.marvel.api.dto.CharacterDTO;
 import com.niu.marvel.api.dto.ComicDTO;
 import com.niu.marvel.api.dto.CreatorDTO;

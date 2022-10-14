@@ -7,8 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+
 @SpringBootApplication
 @EnableFeignClients
+@OpenAPIDefinition(info = @Info(title = "Marvel Resource API", version = "1.0", description = "Fetching data from Marvel"))
 public class MarvelApiResourceApplication {
 
 	public static void main(String[] args) {
