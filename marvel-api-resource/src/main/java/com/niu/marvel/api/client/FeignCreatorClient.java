@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.niu.marvel.api.client.configuration.FeignClientConfig;
 import com.niu.marvel.api.client.model.ResponseModel;
-import com.niu.marvel.api.dto.ComicDTO;
+import com.niu.marvel.api.dto.CreatorDTO;
 
 @FeignClient(name = "feignCreatorClient", url = "${external.api.base-url}", configuration = FeignClientConfig.class)
 public interface FeignCreatorClient {
 
-	@GetMapping(value = "/creators/{creatorId}/comics", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseModel<ComicDTO> getComicsByCreatorId(@PathVariable String creatorId, @SpringQueryMap Params params);
+	@GetMapping(value = "/comics/{comicId}/creators", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseModel<CreatorDTO> getCreatorsByComicId(@PathVariable String comicId, @SpringQueryMap Params params);
 	
 }

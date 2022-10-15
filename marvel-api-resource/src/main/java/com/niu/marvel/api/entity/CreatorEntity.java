@@ -35,13 +35,13 @@ public class CreatorEntity implements Serializable {
 	private String image;
 	@Column(name = "resource_uri")
 	private String resourceURI;
-	
-	@OneToMany(mappedBy = "creator")
-	@JsonBackReference
-	private Set<ComicEntity> comics;
-	
-	@OneToMany(mappedBy = "creator")
-	@JsonBackReference
-	private Set<SerieEntity> series;
+//	
+//	@OneToMany(mappedBy = "creator")
+//	@JsonBackReference
+//	private Set<ComicEntity> comics;
+//	
+//	@OneToMany(mappedBy = "creator")
+//	@JsonBackReference
+//	private Set<SerieEntity> series;
 
 }
