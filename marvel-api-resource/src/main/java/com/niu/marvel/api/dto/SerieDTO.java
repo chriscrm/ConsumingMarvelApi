@@ -14,5 +14,4 @@ public class SerieDTO {
 	private int endYear;
 	private String type;
 	private ThumbnailModel thumbnail;
-	
 }

@@ -1,17 +1,17 @@
 package com.niu.marvel.api.entity;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -35,13 +35,9 @@ public class CreatorEntity implements Serializable {
 	private String image;
 	@Column(name = "resource_uri")
 	private String resourceURI;
-//	
-//	@OneToMany(mappedBy = "creator")
-//	@JsonBackReference
-//	private Set<ComicEntity> comics;
-//	
-//	@OneToMany(mappedBy = "creator")
-//	@JsonBackReference
-//	private Set<SerieEntity> series;
+
+	@JsonIgnore
+	@ManyToMany(mappedBy = "creators")
+	private Collection<ComicEntity> comics;
 
 }

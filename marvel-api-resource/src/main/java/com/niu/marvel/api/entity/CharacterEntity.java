@@ -29,7 +29,11 @@ public class CharacterEntity {
 	private String description;
 	private String image;
 
-	@JsonIgnore // to avoid circular dependency and StackOverflowException
+	@JsonIgnore
 	@ManyToMany(mappedBy = "characters")
 	private Collection<ComicEntity> comics;
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "characters")
+	private Collection<SerieEntity> series;
 }
