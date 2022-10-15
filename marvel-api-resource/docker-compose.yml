@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=Database2022!
+      - MYSQL_DATABASE=marveldb
+      - MYSQL_USER=userdb
+      - MYSQL_PASSWORD=userpwd
+    volumes:
+      - ./schemas:/var/lib/mysql:rw
+    networks:
+      - mysql_network
+  marvel:
+    image: crisr/crm-marvel-api-resource
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/marveldb
+    ports:
+      - 8090:8090
+    networks:
+      - mysql_network
+    depends_on:
+      - mysql    
+networks:
+  mysql_network: {}
