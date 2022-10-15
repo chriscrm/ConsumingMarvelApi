@@ -42,15 +42,18 @@ public class ComicEntity implements Serializable {
 	private String resourceURI;
 	private String image;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private CreatorEntity creator;
+	
 //	@ManyToOne(fetch = FetchType.LAZY)
 ////	@JoinColumn(name = "creator_id", nullable = false)
 //	private CreatorEntity creator;
 //	
-//	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-//	@JoinTable(name = "comics_has_characters", joinColumns = @JoinColumn(name = "comic_id", referencedColumnName = "id"),
-//			inverseJoinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"))
-//	@JsonBackReference
-//	private Collection<CharacterEntity> characters;
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinTable(name = "comics_has_characters", joinColumns = @JoinColumn(name = "comic_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"))
+	@JsonBackReference
+	private Collection<CharacterEntity> characters;
 //	
 //	@ManyToOne
 //	private SerieEntity serie;
