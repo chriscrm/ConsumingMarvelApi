@@ -1,5 +1,6 @@
 package com.niu.marvel.api.entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -16,8 +17,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "character")
-public class CharacterEntity {
+@Table(name = "characters")
+public class CharacterEntity implements Serializable {
+
+	private static final long serialVersionUID = -2612022351283982533L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

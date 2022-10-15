@@ -40,7 +40,7 @@ public class SerieEntity implements Serializable {
 	
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "series_has_characters", joinColumns = @JoinColumn(name = "serie_id", referencedColumnName = "id"),
-				inverseJoinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"))
+				inverseJoinColumns = @JoinColumn(name = "characters_id", referencedColumnName = "id"))
 	private Collection<CharacterEntity> characters;
 
 }
