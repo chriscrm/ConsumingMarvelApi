@@ -14,4 +14,5 @@ public class CreatorDTO {
 	private String fullName;
 	private ThumbnailModel thumbnail;
 	private String resourceURI;
+	
 }

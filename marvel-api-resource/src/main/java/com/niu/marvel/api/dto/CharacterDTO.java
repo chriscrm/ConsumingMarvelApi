@@ -10,5 +10,4 @@ public class CharacterDTO {
 	private String name;
 	private String description;
 	private ThumbnailModel thumbnail;
-
 }

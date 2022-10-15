@@ -1,7 +1,8 @@
 package com.niu.marvel.api.service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.core.env.Environment;
@@ -34,6 +35,7 @@ public class MarvelService {
 	private final FeignCreatorClient creatorClient;
 	private final FeignCharacterClient characterClient;
 	private final Params params;
+	@SuppressWarnings("unused")
 	private final Environment env;
 
 	private final ComicRepository comicRepository;
@@ -80,16 +82,37 @@ public class MarvelService {
 		ResponseModel<ComicDTO> results = client.getComics(params);
 
 		List<ComicDTO> comics = (List<ComicDTO>) results.getData().getResults();
-		List<SerieDTO> seriesDTOs = new ArrayList<>();
-		List<CharacterEntity> characterList = new ArrayList<>();
 
+		Set<CreatorEntity> savedCreators = new HashSet<>(); // CREATORS LISTS
+		Set<SerieEntity> savedSeries = new HashSet<>();
+		Set<CharacterEntity> savedCharacters = new HashSet<>();
+
+		// COMIC ITERATION SECTION :::::::::::::::::::::::::::::::::::::::::::::::::
 		for (ComicDTO comicItem : comics) {
 			CreatorEntity creatorEntityTemp = null;
-			
-			// Fetching Creators by comicId
-			ResponseModel<CreatorDTO> creatorsResponse =
-					creatorClient.getCreatorsByComicId(String.valueOf(comicItem.getId()), params);
 
+			// Fetching Creators by comicId
+			ResponseModel<CreatorDTO> creatorsResponse = creatorClient
+					.getCreatorsByComicId(String.valueOf(comicItem.getId()), params);
+
+			// Fetching Characters by comicId
+			ResponseModel<CharacterDTO> charactersResponse = characterClient
+					.getCharactersByComicId(String.valueOf(comicItem.getId()), params);
+
+			// CHARACTER ITERATION SECTION :::::::::::::::::::::::::::::::::::::::::::::::::
+			for (CharacterDTO characterItem : charactersResponse.getData().getResults()) {
+				CharacterEntity characterEntity = modelMapper.map(characterItem, CharacterEntity.class);
+				characterEntity.setImage(characterItem.getThumbnail().getPath());
+				characterEntity.setCharacterId(characterItem.getId());
+				characterEntity.setComics(null);
+				characterEntity.setId(0);
+
+				// Persisting Character Entity
+				CharacterEntity characterSaved = characterRepository.save(characterEntity);
+				savedCharacters.add(characterSaved);
+			}
+
+			// CREATOR ITERATION SECTION :::::::::::::::::::::::::::::::::::::::::::::::::
 			for (CreatorDTO creatorItem : creatorsResponse.getData().getResults()) {
 				creatorEntityTemp = modelMapper.map(creatorItem, CreatorEntity.class);
 				creatorEntityTemp.setImage(creatorItem.getThumbnail().getPath());
@@ -97,125 +120,42 @@ public class MarvelService {
 				creatorEntityTemp.setId(0);
 
 				// Persisting Creator Entity
-				creatorRepository.save(creatorEntityTemp);
+				CreatorEntity savedCreator = creatorRepository.save(creatorEntityTemp);
+				savedCreators.add(savedCreator);
 
 				// Fetching Series by creatorId
-				ResponseModel<SerieDTO> seriesResponse = serieClient.getSeriesByCreatorId(String.valueOf(creatorEntityTemp.getId()), params);
+				ResponseModel<SerieDTO> seriesResponse = serieClient
+						.getSeriesByCreatorId(String.valueOf(creatorEntityTemp.getId()), params);
 
-				seriesDTOs = (List<SerieDTO>) seriesResponse.getData().getResults();
-				
+				// SERIE ITERATION SECTION :::::::::::::::::::::::::::::::::::::::::::::::::
 				for (SerieDTO serieItem : seriesResponse.getData().getResults()) {
 					SerieEntity serieEntity = modelMapper.map(serieItem, SerieEntity.class);
 					serieEntity.setImage(serieItem.getThumbnail().getPath());
 					serieEntity.setSerieId(serieItem.getId());
+					serieEntity.setCharacters(savedCharacters);
 					serieEntity.setId(0);
 
 					// Persisting Serie entity
-					serieRepository.save(serieEntity);
+					SerieEntity serieSaved = serieRepository.save(serieEntity);
+					savedSeries.add(serieSaved);
 				}
 			}
-			
-			// Fetching Characters by comicId
-			ResponseModel<CharacterDTO> charactersResponse = 
-					characterClient.getCharactersByComicId(String.valueOf(comicItem.getId()), params);
 
-			for(CharacterDTO characterItem : charactersResponse.getData().getResults()) {
-				CharacterEntity characterEntity = modelMapper.map(characterItem, CharacterEntity.class);
-				characterEntity.setImage(characterItem.getThumbnail().getPath());
-				characterEntity.setCharacterId(characterItem.getId());
-				characterEntity.setComics(null);
-				characterEntity.setId(0);
-				
-				// Persisting Character Entity
-				CharacterEntity characterSaved = characterRepository.save(characterEntity);
-				characterList.add(characterSaved);
-			}
-			
 			// Mapping ComicDTO to ComicEntity
 			ComicEntity comicEntity = modelMapper.map(comicItem, ComicEntity.class);
 			comicEntity.setImage(comicItem.getThumbnail().getPath());
 			comicEntity.setComicId(comicItem.getId());
-			comicEntity.setCreator(creatorEntityTemp);
-			comicEntity.setCharacters(characterList);
+			comicEntity.setCreators(savedCreators);
+			comicEntity.setCharacters(savedCharacters);
 			comicEntity.setId(0);
 
 			// Persisting Comic Entity
 			comicRepository.save(comicEntity);
 
 		}
-		
-
 
 		return null;
 		// ******************************
-	}
-
-	/**
-	 * Method getCreators()
-	 * 
-	 * @return returns a list of creators using given parameters of the server-side
-	 *         application of Marvel Api Authentication
-	 */
-	public ResponseModel<CreatorDTO> getCreators() {
-
-//		ResponseModel<CreatorDTO> results = client.getCreators(params);
-//		
-//		List<CreatorDTO> creators = (List<CreatorDTO>) results.getData().getResults();
-//		
-//		// Iterating creators and saving entity relation
-//		creators.forEach(creator -> {
-//			CreatorEntity creatorEntity = modelMapper.map(creator, CreatorEntity.class);
-//			creatorEntity.setImage(creator.getThumbnail().getPath());
-//			creatorEntity.setCreatorId(creator.getId());
-//			
-//			CreatorEntity savedCreator = creatorRepository.save(creatorEntity);
-//			
-//			// Getting creatorId of current creator iteration
-//			ResponseModel<ComicDTO> comicsResponse = creatorClient.getComicsByCreatorId(String.valueOf(creator.getId()), params);
-//			
-//			// Iterating comics that belongs to the current Creator
-//			comicsResponse.getData().getResults().forEach(comic -> {
-//				ComicEntity comicEntity = modelMapper.map(comic, ComicEntity.class);
-//				comicEntity.setImage(comic.getThumbnail().getPath());
-//				comicEntity.setComicId(comic.getId());
-//				comicEntity.setCreator(savedCreator);
-//				
-//				// Fetching Characters by comicId
-//				ResponseModel<CharacterDTO> charactersResponse = 
-//						characterClient.getCharactersByComicId(String.valueOf(comic.getId()), params);
-//				
-//				List<CharacterEntity> characters = new ArrayList<>();
-//				
-//				charactersResponse.getData().getResults().forEach(character -> {
-//					CharacterEntity characterEntity = modelMapper.map(character, CharacterEntity.class);
-//					characterEntity.setImage(character.getThumbnail().getPath());
-//					characterEntity.setCharacterId(character.getId());
-//					
-//					CharacterEntity savedCharacter = characterRepository.save(characterEntity);
-//					characters.add(savedCharacter);
-//				});
-//				
-//				comicEntity.setCharacters(characters);
-//				
-//				comicRepository.save(comicEntity);
-//				
-//			});
-//			
-//			// Getting Series Response Model by creatorId
-//			ResponseModel<SerieDTO> seriesResponse = serieClient.getSeriesByCreatorId(String.valueOf(creator.getId()), params);
-//
-//			seriesResponse.getData().getResults().forEach(serie -> {
-//				SerieEntity serieEntity = modelMapper.map(serie, SerieEntity.class);
-//				serieEntity.setImage(serie.getThumbnail().getPath());
-//				serieEntity.setSerieId(serie.getId());
-//				serieEntity.setCreator(savedCreator);
-//				
-//				serieRepository.save(serieEntity);
-//			});
-//			
-//		});
-
-		return null;
 	}
 
 }

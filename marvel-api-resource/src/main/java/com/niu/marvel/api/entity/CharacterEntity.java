@@ -1,5 +1,6 @@
 package com.niu.marvel.api.entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -16,8 +17,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "character")
-public class CharacterEntity {
+@Table(name = "characters")
+public class CharacterEntity implements Serializable {
+
+	private static final long serialVersionUID = -2612022351283982533L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +32,11 @@ public class CharacterEntity {
 	private String description;
 	private String image;
 
-	@JsonIgnore // to avoid circular dependency and StackOverflowException
+	@JsonIgnore
 	@ManyToMany(mappedBy = "characters")
 	private Collection<ComicEntity> comics;
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "characters")
+	private Collection<SerieEntity> series;
 }

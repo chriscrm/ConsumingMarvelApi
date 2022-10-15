@@ -15,5 +15,6 @@ public class ComicDTO {
 	private String resourceURI;
 	private SerieDTO series;
 	private ThumbnailModel thumbnail;
+
 }
 
