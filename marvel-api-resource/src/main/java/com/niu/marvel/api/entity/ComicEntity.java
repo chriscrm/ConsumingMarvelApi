@@ -38,13 +38,13 @@ public class ComicEntity implements Serializable {
 	private String resourceURI;
 	private String image;
 	
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "comics_creators_links", joinColumns = @JoinColumn(name = "comic_id", referencedColumnName = "id"),
+	@ManyToMany(cascade = {CascadeType.ALL})
+	@JoinTable(name = "comics_creator_links", joinColumns = @JoinColumn(name = "comic_id", referencedColumnName = "id"),
 				inverseJoinColumns = @JoinColumn(name = "creator_id", referencedColumnName = "id"))
 	private Collection<CreatorEntity> creators;
 	
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "comics_characters_links", joinColumns = @JoinColumn(name = "comic_id", referencedColumnName = "id"),
+	@ManyToMany(cascade = {CascadeType.ALL})
+	@JoinTable(name = "comics_character_links", joinColumns = @JoinColumn(name = "comic_id", referencedColumnName = "id"),
 				inverseJoinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"))
 	private Collection<CharacterEntity> characters;
 	

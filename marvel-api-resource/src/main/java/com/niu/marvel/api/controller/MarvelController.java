@@ -26,17 +26,17 @@ public class MarvelController {
 
 	private final MarvelService characterService;
 
-	@Operation(summary = "Get all Marvel Comics")
+	@Operation(summary = "Fetch all Data from Marvel API")
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "OK", 
 		    content = { @Content(mediaType = "application/json", 
 		      schema = @Schema(implementation = CharacterEntity.class)) }), 
-		  @ApiResponse(responseCode = "404", description = "Comics not found", 
+		  @ApiResponse(responseCode = "404", description = "data not found", 
 		    content = @Content),
 		  @ApiResponse(responseCode = "409", description = "Limit greater than 100", 
 		    content = @Content) 
 			  })
-	@GetMapping("/comics")
+	@GetMapping("/fetch-all-data")
 	public ResponseEntity<ResponseModel<ComicDTO>> getAllComics(@RequestParam(value = "limit", defaultValue = "100") int limit){
 		return new ResponseEntity<>(characterService.getComics(),HttpStatus.OK);
 	}

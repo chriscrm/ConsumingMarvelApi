@@ -38,8 +38,8 @@ public class SerieEntity implements Serializable {
 	private String type;
 	private String image;
 	
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "series_characters_links", joinColumns = @JoinColumn(name = "serie_id", referencedColumnName = "id"),
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "series_character_links", joinColumns = @JoinColumn(name = "serie_id", referencedColumnName = "id"),
 				inverseJoinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"))
 	private Collection<CharacterEntity> characters;
 
