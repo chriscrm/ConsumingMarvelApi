@@ -17,7 +17,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "creator")
+@Table(name = "creators")
 public class CreatorEntity implements Serializable {
 	
 	private static final long serialVersionUID = 3664151277392844686L;

@@ -18,7 +18,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "serie")
+@Table(name = "series")
 public class SerieEntity implements Serializable {
 	
 	private static final long serialVersionUID = -6857951470192218659L;
@@ -39,8 +39,8 @@ public class SerieEntity implements Serializable {
 	private String image;
 	
 	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "series_has_characters", joinColumns = @JoinColumn(name = "serie_id", referencedColumnName = "id"),
-				inverseJoinColumns = @JoinColumn(name = "characters_id", referencedColumnName = "id"))
+	@JoinTable(name = "series_characters_links", joinColumns = @JoinColumn(name = "serie_id", referencedColumnName = "id"),
+				inverseJoinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"))
 	private Collection<CharacterEntity> characters;
 
 }
